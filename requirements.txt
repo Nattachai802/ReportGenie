@@ -1,0 +1,8 @@
+django 
+pandas 
+clickhouse-driver 
+python-dotenv 
+openpyxl 
+pyarrow 
+chardet
+dotenv
