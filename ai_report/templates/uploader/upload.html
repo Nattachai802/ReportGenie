@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Upload to ClickHouse</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui; max-width: 760px; margin: 40px auto; padding: 0 16px; }
+    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; }
+    .row { margin-bottom: 12px; }
+    input[type="file"], input[type="text"] { width: 100%; padding: 8px; }
+    button { padding: 10px 16px; border: 0; border-radius: 8px; background: #111827; color: white; cursor: pointer; }
+    .ok { background: #065f46; padding: 10px; color: #ecfdf5; border-radius: 8px; }
+    .err { background: #7f1d1d; padding: 10px; color: #fee2e2; border-radius: 8px; }
+    small { color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>อัปโหลดไฟล์ → DataFrame → ClickHouse</h1>
+  <div class="card">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row">
+        <label>ไฟล์ (.csv / .xlsx)</label>
+        {{ form.file }}
+      </div>
+      <div class="row">
+        <label>ชื่อ Table (เว้นว่างได้)</label>
+        {{ form.table_name }}<br>
+        <small>ไม่กรอก = ใช้ชื่อไฟล์อัตโนมัติ (จะปรับเป็น snake_case ให้เอง)</small>
+      </div>
+      <button type="submit">อัปโหลด & ส่งเข้า ClickHouse</button>
+    </form>
+  </div>
+
+  {% if inserted is not None %}
+    <p class="ok">สำเร็จ! สร้าง/ใช้ตาราง <b>{{table}}</b> และ insert แถวจำนวน <b>{{inserted}}</b></p>
+  {% endif %}
+  {% if error %}
+    <p class="err">เกิดข้อผิดพลาด: {{error}}</p>
+  {% endif %}
+</body>
+</html>
